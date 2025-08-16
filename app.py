@@ -5,13 +5,12 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 # Load .env (API key + assistant id)
+from dotenv import load_dotenv
+import os
 load_dotenv()
-API_KEY = os.getenv("OPENAI_API_KEY")
+API_KEY      = os.getenv("OPENAI_API_KEY")
 ASSISTANT_ID = os.getenv("ASSISTANT_ID")
-if not API_KEY or not ASSISTANT_ID:
-    st.error("Missing OPENAI_API_KEY or ASSISTANT_ID in .env")
-    st.stop()
-
+from openai import OpenAI
 client = OpenAI(api_key=API_KEY)
 
 st.set_page_config(page_title="ISFE2 Assistant", page_icon="💬")
