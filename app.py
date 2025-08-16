@@ -4,14 +4,17 @@ import streamlit as st
 from dotenv import load_dotenv
 from openai import OpenAI
 
-# Load .env (API key + assistant id)
-from dotenv import load_dotenv
-import os
-load_dotenv()
-API_KEY      = os.getenv("OPENAI_API_KEY")
-ASSISTANT_ID = os.getenv("ASSISTANT_ID")
-from openai import OpenAI
-client = OpenAI(api_key=API_KEY)
+load_dotenv(override=True)  # local .env if present; Secrets in the cloud
+
+API_KEY      = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
+ASSISTANT_ID = os.getenv("ASSISTANT_ID")    or st.secrets.get("ASSISTANT_ID")
+PROJECT_ID   = os.getenv("OPENAI_PROJECT")  or st.secrets.get("OPENAI_PROJECT")  # optional
+
+if not API_KEY or not ASSISTANT_ID:
+    st.error("Missing OPENAI_API_KEY or ASSISTANT_ID. Add them to Secrets.")
+    st.stop()
+
+client = OpenAI(api_key=API_KEY, project=PROJECT_ID) if PROJECT_ID else OpenAI(api_key=API_KEY)
 
 st.set_page_config(page_title="ISFE2 Assistant", page_icon="💬")
 st.title("ISFE2 Assistant")
